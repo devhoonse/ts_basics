@@ -170,12 +170,11 @@ interface ProductProperties {
   description?: string;
 }
 class ProductWrapper {
-  protected id: number;
-  protected description: string;
+  protected id?: number;
+  protected description?: string;
   constructor(properties?: ProductProperties) {
-    const {id, description} = properties;
-    this.id = id;
-    this.description = description;
+    this.id = properties?.id;
+    this.description = properties?.description;
   }
 }
 class ProductWrapperLegacy {
@@ -196,5 +195,111 @@ class ProductWrapperLegacy {
 }
 
 
+
+interface MotorVehicle {
+  startEngine(): boolean;
+  stopEngine(): boolean;
+  brake(): boolean;
+  accelerate(speed: number): void;
+  honk(howLong: number): void;
+}
+class Car implements MotorVehicle {
+  accelerate(speed: number) {
+    console.log(`Driving Faster => ${speed}`);
+  }
+  brake(): boolean {
+    return false;
+  }
+  honk(howLong: number): void {
+    console.log(`Beep for => ${howLong}`);
+  }
+  startEngine(): boolean {
+    return false;
+  }
+  stopEngine(): boolean {
+    return false;
+  }
+}
+const car: MotorVehicle = new Car();
+car.startEngine();
+
+
+interface Flyable extends MotorVehicle {
+  fly(howHigh: number): void;
+  land(): void;
+}
+interface Swimmable {
+  swim(howFar: number): void;
+}
+class FutureCar extends Car implements MotorVehicle, Flyable, Swimmable {
+  fly(howHigh: number): void {
+    console.log(`Fly '${howHigh}' Feet High!`);
+  }
+  land(): void {
+    console.log(`Landing Complete.`);
+  }
+  swim(howFar: number): void {
+    console.log(`Swimming with speed '${howFar}'!`);
+  }
+}
+
+
+interface ProductInfo {
+  id: number;
+  description: string;
+}
+interface IProductInfoService {
+  getProductById(id: number): ProductInfo;
+  getProducts(): ProductInfo[];
+}
+// class ProductInfo {
+//   constructor(
+//     id: number,
+//     description: string
+//   ) {
+//
+//   }
+// }
+class ProductInfoService implements IProductInfoService{
+  getProducts(): ProductInfo[] {
+    return [];
+  }
+  getProductById(id: number): ProductInfo {
+    return {
+      id: id,
+      description: `Man, this is good shit..`
+    };
+  }
+}
+class MockProductInfoService implements IProductInfoService {
+  getProductById(id: number): ProductInfo {
+    return {
+      id: id,
+      description: `Man, this is dope..`
+    };
+  }
+  getProducts(): ProductInfo[] {
+    return [];
+  }
+}
+// class MockProductInfoService {   /** Not a good definition... **/
+//   getProducts(): ProductInfo[] {
+//     return [];
+//   }
+//   getProductById(id: number): ProductInfo {
+//     return {
+//       id: id,
+//       description: `Man, this is dope..`
+//     };
+//   }
+// }
+function getProductService(isProduction: boolean): IProductInfoService {
+  if (isProduction) {
+    return new ProductInfoService();
+  }
+  return new MockProductInfoService();
+}
+const productInfoService = getProductService(false);
+const productInfos = productInfoService.getProducts();
 
 
