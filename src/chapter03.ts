@@ -49,7 +49,6 @@ class Gangsta {
   }
 }
 class Asshole extends Gangsta {
-
 }
 const g1 = new Gangsta();
 const g2 = new Gangsta();
@@ -105,7 +104,6 @@ abstract class Member {
     this.increasePay(percent);
   }
   abstract increasePay(percent: number): void
-
 }
 class Staff extends Member {
   constructor(
@@ -231,7 +229,7 @@ interface Flyable extends MotorVehicle {
 interface Swimmable {
   swim(howFar: number): void;
 }
-class FutureCar extends Car implements MotorVehicle, Flyable, Swimmable {
+class FutureCar extends Car implements Flyable, Swimmable {
   fly(howHigh: number): void {
     console.log(`Fly '${howHigh}' Feet High!`);
   }
